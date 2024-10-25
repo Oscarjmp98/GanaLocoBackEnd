@@ -96,11 +96,35 @@ const getCodes = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener los códigos' });
   }
 };
+/*---------------------------------------------Registar Administrador-------------------------------------------- */
+const createAdmin = async (req, res) => {
+  const { username, password, nombre,} = req.body;
+  const role = 'admin';
 
+  try {
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: 'Usuario ya existe' });
+    }
+
+    const newUser = new User({
+      username,
+      nombre,
+      password,
+      role
+    });
+
+    await newUser.save();
+    res.json({ success: true, message: 'Usuario creado exitosamente' });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Error en el servidor' });
+  }
+};
 module.exports = {
     loginUser,
     createUser,
     getCodes,
-    registerCode
-
+    registerCode,
+    createAdmin
 }

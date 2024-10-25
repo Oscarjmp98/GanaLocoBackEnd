@@ -5,6 +5,7 @@ const Controller = require('./controllers/Controller.js');
 router
     .post('/login', Controller.loginUser)
     .post('/createUser', Controller.createUser)
+    .post('/createAdmin', Controller.createAdmin)
     .post('/Registrar', Controller.registerCode)
     .get('/Codigos',Controller.getCodes)
 
