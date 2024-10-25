@@ -113,8 +113,8 @@ const createAdmin = async (req, res) => {
   const role = 'admin';
 
   try {
-    const existingUser = await Admin.findOne({ username });
-    if (existingUser) {
+    const existingAdmin = await Admin.findOne({ username });
+    if (existingAdmin) {
       return res.status(400).json({ success: false, message: 'Usuario ya existe' });
     }
 
