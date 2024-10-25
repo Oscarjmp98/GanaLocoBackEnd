@@ -130,7 +130,7 @@ const registerCode = async (req, res) => {
 
 const getCodes = async (req, res) => {
   try {
-    const codes = await Code.find().populate('user', 'username email');
+    const codes = await Code.find().populate('user', 'nombre username');
     res.json(codes);
   } catch (error) {
     res.status(500).json({ message: 'Error al obtener los códigos' });
