@@ -13,7 +13,18 @@ const userSchema = new mongoose.Schema({
   });
 
   const User = mongoose.model('User', userSchema,'usuarios');
-/*----------------------------------------LOGIN---------------------------------------------------------------*/
+ 
+ /*----------------------------------------------Estructura de la base de datos Admin-------------------------------*/
+ const AdminSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  nombre: { type: String, required: true },
+  role: { type: String, default: 'Admin' }
+});
+const Admin = mongoose.model('Admin', AdminSchema,'Administradores');
+
+
+ /*----------------------------------------LOGIN---------------------------------------------------------------*/
 
 const loginUser= async (req, res) => {
     const { username, password } = req.body;
@@ -102,19 +113,19 @@ const createAdmin = async (req, res) => {
   const role = 'admin';
 
   try {
-    const existingUser = await User.findOne({ username });
+    const existingUser = await Admin.findOne({ username });
     if (existingUser) {
       return res.status(400).json({ success: false, message: 'Usuario ya existe' });
     }
 
-    const newUser = new User({
+    const newAdmin = new Admin({
       username,
       nombre,
       password,
       role
     });
 
-    await newUser.save();
+    await newAdmin.save();
     res.json({ success: true, message: 'Usuario creado exitosamente' });
   } catch (error) {
     console.error('Error:', error);
