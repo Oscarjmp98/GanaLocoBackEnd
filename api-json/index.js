@@ -18,8 +18,11 @@ app.use(cors({
 app.use(express.json());
 app.use('/v1/routes', router);
 
-mongoose.connect(process.env.MONGODB_URI, {
-  })
+/*mongoose.connect(process.env.MONGODB_URI, {
+  })*/
+mongoose.connect('mongodb+srv://OscarJM:BdReYjum8s047XyT@ganaloco.a1u9b.mongodb.net/GanaLoco?retryWrites=true&w=majority&appName=GanaLoco',{})
+
+
 .then(() => console.log('Conectado a MongoDB Atlas'))
 .catch(err => console.error('Error de conexión a MongoDB:', err));
 
