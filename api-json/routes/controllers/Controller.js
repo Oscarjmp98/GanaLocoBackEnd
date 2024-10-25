@@ -75,38 +75,6 @@ const createUser = async (req, res) => {
   }
 };
 
-/*---------------------------------------------Registar Codigos-------------------------------------------- */
-const codeSchema = new mongoose.Schema({
-  code: {type:String},
-  fecha: { type: Date, default: Date.now },
-  Ganador: {type: Boolean}
-});
-const Code = mongoose.model('Code', codeSchema, "codigos");
-
-const registerCode = async (req, res) => {
-  try {
-    const { code } = req.body;
-    const existingCode = await Code.findOne({ code });
-    if (existingCode) {
-      return res.status(400).json({ message: 'Código ya registrado' });
-    }
-    const newCode = new Code({ code });
-    console.log( newCode)
-    await newCode.save();
-    res.json(newCode);
-  } catch (error) {
-    res.status(500).json({ message: 'Error al registrar el código' });
-  }
-};
-
-const getCodes = async (req, res) => {
-  try {
-    const codes = await Code.find();
-    res.json(codes);
-  } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los códigos' });
-  }
-};
 /*---------------------------------------------Registar Administrador-------------------------------------------- */
 const createAdmin = async (req, res) => {
   const { username, password, nombre,} = req.body;
@@ -132,6 +100,43 @@ const createAdmin = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error en el servidor' });
   }
 };
+
+/*---------------------------------------------Registar Codigos-------------------------------------------- */
+const codeSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  code: {type:String},
+  fecha: { type: Date, default: Date.now },
+  Ganador: {type: Boolean}
+});
+const Code = mongoose.model('Code', codeSchema, "codigos");
+
+const registerCode = async (req, res) => {
+  try {
+    const { code } = req.body;
+    const userId = req.user._id;
+
+    const existingCode = await Code.findOne({ code });
+    if (existingCode) {
+      return res.status(400).json({ message: 'Código ya registrado' });
+    }
+    const newCode = new Code({ code, user: userId });
+    console.log( newCode)
+    await newCode.save();
+    res.json(newCode);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al registrar el código' });
+  }
+};
+
+const getCodes = async (req, res) => {
+  try {
+    const codes = await Code.find().populate('user', 'username email');
+    res.json(codes);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener los códigos' });
+  }
+};
+
 module.exports = {
     loginUser,
     createUser,
