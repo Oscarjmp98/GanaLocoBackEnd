@@ -80,6 +80,7 @@ const registerCode = async (req, res) => {
       return res.status(400).json({ message: 'Código ya registrado' });
     }
     const newCode = new Code({ code });
+    console.log( newCode)
     await newCode.save();
     res.json(newCode);
   } catch (error) {
