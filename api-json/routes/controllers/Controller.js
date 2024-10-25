@@ -66,7 +66,7 @@ const createUser = async (req, res) => {
 
 /*---------------------------------------------Registar Codigos-------------------------------------------- */
 const codeSchema = new mongoose.Schema({
-  codigo: {type:String},
+  code: {type:String},
   fecha: { type: Date, default: Date.now },
   Ganador: {type: Boolean}
 });
